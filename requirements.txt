@@ -1,0 +1,22 @@
+flask==3.0.3
+gunicorn==22.0.0
+python-dotenv==1.0.1
+pydantic==2.8.2
+pyyaml==6.0.2
+markdown2==2.4.13
+
+# LangChain v0.2+ stack
+langchain==0.2.13
+langchain-openai==0.1.23
+langchain-community==0.2.12
+langchain-chroma==0.1.3
+chromadb==0.5.5
+langchain-groq==0.1.5
+tiktoken==0.7.0
+
+# Optional (if you actually ingest docs)
+unstructured[all-docs]
+pillow
+lxml
+
+tqdm==4.66.5

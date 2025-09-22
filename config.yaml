@@ -1,0 +1,47 @@
+app:
+  title: "CKD/ESRD Diet and microbiome suggestions"
+  description: "Agentic hybrid RAG for CKD/ESRD diet & microbiome guidance (not medical advice)."
+  debug: true
+
+
+paths:
+  data_cache_dir: ./data_cache
+  chroma_dir: ./cache/chroma
+
+
+retrieval:
+  collection_name: er_nexus_multimodal
+  k_initial: 6 # first-pass retrieval
+  k_expand: 10 # expanded if planner deems complex
+
+
+models:
+  primary_llm: openai/gpt-4o-mini # vision-capable for answers
+  source_llm: openai/gpt-4o # used in chain_with_sources
+  fallback_llm: groq/llama-3.1-70b-versatile
+  embedding: text-embedding-3-large
+
+
+
+ui:
+  show_context_by_default: false
+  enable_model_switch: true
+  sample_queries:
+  - "Low-potassium meal suggestions for CKD stage 3 with diabetes."
+  - "Summarize probiotic evidence for reducing uremic toxins in ESRD."
+  - "Compare protein targets for peritoneal dialysis vs hemodialysis."
+  - "Which high-phosphorus foods to avoid when phosphorus is elevated?"
+  - "According to the work :'Current updates on metabolites and its interlinked pathways as
+     biomarkers for diabetic kidney disease: A systematic review', what contributes to CKD by
+    generating various metabolites?"
+  - In the heatmap of correlation coefficients between serum SCFA and clinical indicators in the
+    DF group, what were BA and Hb correlated with?
+
+
+
+rules:
+  sodium_mg_max: 2000
+  potassium_mg_limit_flag: 2500
+  phosphorus_mg_limit_flag: 1000
+  protein_g_per_kg_ckd: 0.6-0.8
+  protein_g_per_kg_dialysis: 1.0-1.2

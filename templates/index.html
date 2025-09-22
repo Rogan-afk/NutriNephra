@@ -1,0 +1,138 @@
+{% extends 'base.html' %}
+{% block content %}
+<!-- your page content -->
+
+
+<div class="row g-4">
+  <!-- LEFT: Input + Response + References -->
+  <div class="col-12 col-lg-7">
+    <!-- Ask -->
+    <div class="card glass">
+      <div class="card-header card-h"><strong>Ask a Question</strong></div>
+      <div class="card-body">
+        <form method="post" id="ask-form">
+          <div class="mb-3">
+            <textarea name="question" class="form-control form-dark" rows="3"
+              placeholder="e.g., Low-potassium breakfast ideas for CKD stage 3…" required></textarea>
+          </div>
+          <button type="submit" class="btn btn-primary px-4">Submit</button>
+        </form>
+      </div>
+    </div>
+
+    <!-- Response -->
+    <div class="card glass mt-3">
+      <div class="card-header card-h"><strong>Response</strong></div>
+      <div class="card-body">
+        {% if answer %}
+          <div class="answer markdown">
+            {{ answer|safe }}
+          </div>
+        {% else %}
+          <div class="text-muted small">Respone will be visible here, Scroll all the way down to your right for complete context.</div>
+        {% endif %}
+      </div>
+    </div>
+
+    <!-- References (stay in LEFT column, below Response) -->
+    {% if references %}
+    <div class="card glass mt-3">
+      <div class="card-header card-h"><strong>References</strong></div>
+      <div class="card-body scrollbox">
+        <ol class="mb-0">
+          {% for ref in references %}
+            <li class="context-snippet">{{ ref }}</li>
+          {% endfor %}
+        </ol>
+      </div>
+    </div>
+    {% endif %}
+  </div>
+
+  <!-- RIGHT: Quick Start + Context -->
+  <div class="col-12 col-lg-5">
+    <!-- Quick Start -->
+    <div class="card glass">
+      <div class="card-header card-h d-flex justify-content-between">
+        <strong>Quick Start</strong>
+        <span class="small text-muted">Click to copy</span>
+      </div>
+      <div class="card-body">
+        <ul class="list-unstyled mb-0">
+          {% for q in sample_queries %}
+          <li class="mb-2">
+            <span class="badge bg-primary me-2">Try</span>
+            <a href="#" class="try-link" data-q="{{ q }}">{{ q }}</a>
+          </li>
+          {% endfor %}
+        </ul>
+      </div>
+    </div>
+
+	   <div class="card-body scrollbox">
+	  {% if context_texts %}
+		{% for t in context_texts %}
+		  <div class="context-meta">Page: {{ t.page_number }}</div>
+		  <pre class="context-snippet preserve">{{ t.text|safe }}</pre>
+
+		  {% if not loop.last %}<hr class="hr-faint">{% endif %}
+		{% endfor %}
+	  {% else %}
+		<div class="text-muted small">Ask a question to see retrieved textual context.</div>
+	  {% endif %}
+	</div>
+<!-- Context (Text) -->
+<div class="card glass mt-3">
+  <div class="card-header card-h d-flex justify-content-between">
+    <strong>Context (Text)</strong>
+    <span class="small text-muted">Shown after a query</span>
+  </div>
+  <div class="card-body scrollbox">
+    {% if context_texts and context_texts|length > 0 %}
+      {% for t in context_texts %}
+        <div class="context-meta">Page: {{ t.page_number }}</div>
+        <!-- keep bullet line breaks -->
+        <pre class="context-snippet preserve">{{ t.text }}</pre>
+        {% if not loop.last %}<hr class="hr-faint">{% endif %}
+      {% endfor %}
+    {% else %}
+      <div class="context-snippet">No textual context found for this query.</div>
+    {% endif %}
+  </div>
+</div>
+
+    <!-- Context (Images) -->
+<div class="card glass mt-3">
+  <div class="card-header card-h"><strong>Context (Images)</strong></div>
+  <div class="card-body">
+    {% if context_images and context_images|length > 0 %}
+      <div class="row g-3">
+        {% for img in context_images %}
+          <div class="col-6">
+            <img class="img-fluid rounded shadow-sm context-img" src="data:image/jpeg;base64,{{ img.data }}" alt="Context image">
+            {% if img.summary %}
+              <div class="img-cap mt-2">{{ img.summary|safe }}</div>
+            {% endif %}
+          </div>
+        {% endfor %}
+      </div>
+    {% else %}
+      <div class="context-snippet">No image context available.</div>
+    {% endif %}
+  </div>
+</div>
+
+
+<script>
+  // Copy sample query into textarea
+  document.querySelectorAll('.try-link').forEach(el => {
+    el.addEventListener('click', (e) => {
+      e.preventDefault();
+      const q = el.getAttribute('data-q');
+      const ta = document.querySelector('textarea[name="question"]');
+      ta.value = q;
+      ta.focus();
+    });
+  });
+</script>
+{% endblock %}

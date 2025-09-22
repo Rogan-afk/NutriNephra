@@ -1,0 +1,56 @@
+ER-NEXUS/
+├─ app.py                               # Flask app: loads PKLs, builds vectorstore/retriever, chains, UI routes
+├─ config.yaml                          # App + model + UI config (used by AppConfig)
+├─ requirements.txt                     # Python deps (includes gunicorn for prod)
+├─ Procfile                             # (Render/Railway/etc.) web start command with gunicorn
+├─ .env                                 # (local) secrets & API keys (not committed)
+├─ Dockerfile                           # (optional) container build for Docker/Cloud Run
+├─ .dockerignore                        # (optional) docker context exclusions
+
+├─ ernexus/
+│  ├─ __init__.py
+│  ├─ config.py                         # AppConfig (Pydantic) + from_yaml loader
+│  ├─ formatting.py                     # sanitize_summary, bulletize, tighten_answer, image caption helpers
+│  ├─ prompts/
+│  │  ├─ __init__.py
+│  │  └─ system_prompts.py             # RENAL_PERSONA prompt (concise bullets, neutral disclaimer)
+│  ├─ utils/
+│  │  ├─ __init__.py
+│  │  └─ logging.py                    # small log helpers
+│  ├─ io/
+│  │  ├─ __init__.py
+│  │  └─ cache_loader.py               # (optional) generic cache loader (local override used in app.py)
+│  ├─ retrieval/
+│  │  ├─ __init__.py
+│  │  ├─ vectorstore.py                # build_vectorstore (Chroma + embeddings)
+│  │  ├─ multi_vector.py               # MultiVector retriever wiring
+│  │  └─ reranker.py                   # (if used) cross-encoder re-rank utilities
+│  ├─ chains/
+│  │  ├─ __init__.py
+│  │  └─ qa.py                         # build_answer_only & build_agentic_chain_with_sources; temp=0.18 picker
+│  ├─ guards/
+│  │  ├─ __init__.py
+│  │  └─ validator.py                  # LLM guard + relevancy checks
+│  └─ rules/
+│     ├─ __init__.py
+│     └─ counsel.py                    # diet_safety_notes (appends concise safety bullet only when relevant)
+
+├─ templates/
+│  ├─ base.html                         # Root layout (bg.jpeg + translucent navbar, loads app.css)
+│  └─ index.html                        # Page: Ask, Response, References, Context (Text & Images)
+
+├─ static/
+│  ├─ css/
+│  │  └─ app.css                       # Glass UI, strong contrast, context scrollboxes, <mark> highlight
+│  └─ images/
+│     └─ bg.jpeg                       # Background image
+
+├─ data_cache/                          # PKL caches (committed or mounted in prod)
+│  ├─ texts.pkl                         # (optional) raw text items (may be absent/unpicklable; app handles)
+│  ├─ text_summaries.pkl                # cleaned summaries used for retrieval & keyword fallback
+│  ├─ images.pkl                        # base64-encoded images list
+│  ├─ image_summaries.pkl               # captions/summaries for images
+│  ├─ tables.pkl                        # (optional) table objects
+│  └─ table_summaries.pkl               # (optional) table summaries
+
+└─ render.yaml                           # (optional) Render IaC config for zero-docker deploy
