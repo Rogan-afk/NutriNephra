@@ -37,6 +37,10 @@
 - **`ernexus/guards/`** — Guards for unsafe or irrelevant inputs.  
 - **`ernexus/rules/`** — Encoded dietary rules/constraints.  
 
+
+https://github.com/user-attachments/assets/5ec332ea-8dfd-493d-95e0-dae2a9503c70
+
+
 ---
 
 ## System Architecture
@@ -44,6 +48,11 @@
 The architecture uses a **multi-vector retriever with Chroma** to handle multimodal sources (**text, tables, images**). Queries are expanded with a **planner**, re-ranked, and passed to QA chains for final response generation.  
 
 ### Architecture Flow 
+
+
+
+![ernex_final](https://github.com/user-attachments/assets/696a2994-452f-4164-ab0a-eafb645abf91)
+
 ```mermaid
 flowchart TD
     A[User Query] --> B[Vector DB: ChromaDB]
