@@ -20,7 +20,10 @@
 
 ## Overview
 
-**ER-NEXUS** is an advanced, **agentic hybrid RAG** (Retrieval-Augmented Generation) system that provides evidence-based guidance on **diet and microbiome management** for individuals with **Chronic Kidney Disease (CKD)** and **End-Stage Renal Disease (ESRD)**.  
+**ER-NEXUS** is an **agentic multimodal RAG** (Retrieval-Augmented Generation) system that provides evidence-based guidance on **diet and microbiome management** for individuals with **Chronic Kidney Disease (CKD)** and **End-Stage Renal Disease (ESRD)**. The system Merges dietary strategies and probiotic intervention into an unified suggestion pipeline. There is also potential scope and adaptation for other conditions beyond CKD and ESRD.
+
+
+  
 
 **Disclaimer:** This system is purely experimental and intended for research purposes.
 
@@ -265,17 +268,4 @@ A concise workflow for extending the system:
    - Run `python app.py`.  
    - Check `/health` endpoint.  
 
----
 
-## Citation
-
-If you use **ER-NEXUS** in your research, please cite:
-
-```bibtex
-@misc{ernexus2025,
-  title   = {ER-NEXUS: Renal Nutrition & Evidence eXtraction Unified System},
-  author  = {Your Name},
-  year    = {2025},
-  note    = {Available at: https://github.com/your-repo/ernexus}
-}
-```
