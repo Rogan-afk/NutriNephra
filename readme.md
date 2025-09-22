@@ -13,6 +13,7 @@
 - [API Endpoints](#api-endpoints)
 - [Evaluation (Optional)](#evaluation-optional)
 - [Project Directory Structure](#project-directory-structure)
+- [Developer Workflow](#developer-workflow)
 - [Citation](#citation)
 
 ---
@@ -21,22 +22,22 @@
 
 **ER-NEXUS** is an advanced, **agentic hybrid RAG** (Retrieval-Augmented Generation) system that provides evidence-based guidance on **diet and microbiome management** for individuals with **Chronic Kidney Disease (CKD)** and **End-Stage Renal Disease (ESRD)**.  
 
-**Disclaimer:** This system is purely experimental.
+⚠️ **Disclaimer:** This system is purely experimental and intended for research purposes.
 
 ### Key Components
-- **`app.py`** — Main Flask entry point. Initializes retrievers, loads cached data, and routes UI/API.  
+- **`app.py`** — Flask entry point. Initializes retrievers, loads cached data, and routes UI/API.  
 - **`config.yaml`** — Central configuration for models, UI, retrieval, and dietary rules.  
 - **`ernexus/config.py`** — Pydantic models for config parsing/validation.  
 - **`ernexus/chains/qa.py`** — Defines QA pipelines (answer-only vs. answer+citations).  
-- **`ernexus/retrieval/vectorstore.py`** — Creates and manages Chroma vector store.  
-- **`ernexus/guards/`** — Guards for filtering unsafe or irrelevant inputs.  
+- **`ernexus/retrieval/vectorstore.py`** — Manages Chroma vector store.  
+- **`ernexus/guards/`** — Guards for unsafe or irrelevant inputs.  
 - **`ernexus/rules/`** — Encoded dietary rules/constraints.  
 
 ---
 
 ## System Architecture
 
-The architecture uses a **multi-vector retriever with Chroma** to handle multimodal sources (**text, tables, images**). Queries are expanded with a **planner**, re-ranked, then passed to QA chains for generation.  
+The architecture uses a **multi-vector retriever with Chroma** to handle multimodal sources (**text, tables, images**). Queries are expanded with a **planner**, re-ranked, and passed to QA chains for final response generation.  
 
 ### Architecture Flow (Mermaid Diagram)
 ```mermaid
@@ -46,58 +47,53 @@ flowchart TD
     C --> D[Re-ranking]
     D --> E[QA Chains]
     E -->|Answer + Sources| F[Frontend/UI]
+```
 
-Re-ranking & Response Generation
+---
 
-Retrieved documents are re-ranked for relevance.
+## Re-ranking & Response Generation
 
-Two QA modes are supported:
+- Retrieved documents are **re-ranked** for maximum relevance.  
+- QA modes:
+  - **Answer-only mode** → concise output.  
+  - **Agentic mode** → answer with sources.  
 
-Answer-only mode → concise response.
+---
 
-Agentic mode → response with cited sources.
+## Data Collection
 
-Data Collection
+Data is preprocessed and cached for **fast runtime performance**.  
 
-Data is preprocessed and cached in .pkl files for fast load times.
+### `.pkl` Cache Files
+Located in `data_cache/`:  
+- `texts.pkl` → raw text items  
+- `text_summaries.pkl` → text summaries  
+- `images.pkl` → base64-encoded images  
+- `image_summaries.pkl` → captions & summaries  
+- `tables.pkl` → structured tables  
+- `table_summaries.pkl` → summaries of tables  
 
-.pkl Cache Files
+The system is robust against missing/unreadable files.  
 
-Located in data_cache/:
+---
 
-texts.pkl — raw text items
+## Frontend & UI/UX
 
-text_summaries.pkl — cleaned text summaries
+- Built with **Flask**.  
+- Clean **glass-like aesthetic**.  
+- Features:
+  - Query input → contextualized answers  
+  - Highlighted terms  
+  - Sources inline  
 
-images.pkl — base64-encoded images
+---
 
-image_summaries.pkl — captions & summaries
+## Configuration
 
-tables.pkl — table objects
+Configuration is stored in **`config.yaml`**, validated by `ernexus/config.py`.  
 
-table_summaries.pkl — table summaries
-
-The app handles missing/unreadable files gracefully.
-
-Frontend & UI/UX
-
-Flask-based web app.
-
-Clean glass-like aesthetic with scrollable context panels.
-
-Features:
-
-Query input → contextualized answers
-
-Highlighted terms
-
-Sources listed inline
-
-Configuration
-
-The app is controlled via config.yaml, validated by ernexus/config.py.
-
-Example config.yaml
+### Example `config.yaml`
+```yaml
 app:
   title: "ER-NEXUS"
   description: "Renal Nutrition & Evidence eXtraction"
@@ -124,61 +120,79 @@ rules:
   sodium_limit: 2000
   potassium_limit: 2500
   phosphorus_limit: 1000
+```
 
-Quickstart (Local)
+---
 
-Install dependencies
+## Quickstart (Local)
 
-pip install -r requirements.txt
+1. **Install dependencies**
+   ```bash
+   pip install -r requirements.txt
+   ```
 
+2. **Set up environment**
+   ```bash
+   cp .env.example .env
+   ```
+   Add API keys in `.env`.
 
-Set up environment
+3. **Run the app**
+   ```bash
+   python app.py
+   ```
 
-cp .env.example .env
+---
 
+## Production Deployment (No-Docker)
 
-Add your API keys in .env.
-
-Run the app
-
-python app.py
-
-Production Deployment (No-Docker)
-
-Run with Gunicorn:
-
+Run with Gunicorn:  
+```bash
 gunicorn app:app --workers 4 --bind 0.0.0.0:8000
+```
 
-
-Example Procfile:
-
+Example **Procfile**:
+```
 web: gunicorn app:app --workers=4 --bind=0.0.0.0:$PORT
+```
 
-Production Deployment (Docker)
+---
 
-Build image
+## Production Deployment (Docker)
 
-docker build -t ernexus .
+1. **Build image**
+   ```bash
+   docker build -t ernexus .
+   ```
 
+2. **Run container**
+   ```bash
+   docker run -p 8000:8000 ernexus
+   ```
 
-Run container
+---
 
-docker run -p 8000:8000 ernexus
+## API Endpoints
 
-API Endpoints
-Method	Endpoint	Description
-GET	/	Main UI page
-POST	/	Accepts query, returns JSON
-GET	/health	Health check status
-Evaluation (Optional)
+| Method | Endpoint   | Description                  |
+|--------|-----------|------------------------------|
+| GET    | `/`       | Main UI page                 |
+| POST   | `/`       | Accepts query, returns JSON  |
+| GET    | `/health` | Health check status          |
 
-Evaluation can be performed using:
+---
 
-Expert review (manual validation against domain experts)
+## Evaluation (Optional)
 
-NLP metrics: BLEU, ROUGE, BERTScore
+Evaluation can be performed using:  
+- **Expert review** (manual validation)  
+- **NLP metrics**: BLEU, ROUGE, BERTScore  
 
-Project Directory Structure
+---
+
+## Project Directory Structure
+
+```
 ER-NEXUS/
 ├─ app.py
 ├─ config.yaml
@@ -225,14 +239,43 @@ ER-NEXUS/
    ├─ image_summaries.pkl
    ├─ tables.pkl
    └─ table_summaries.pkl
+```
 
-Citation
+---
 
-If you use ER-NEXUS in your research, please cite:
+## Developer Workflow
 
+A concise workflow for extending the system:
+
+1. **Add new retrievers**  
+   - Implement in `ernexus/retrieval/`.  
+   - Register in `app.py`.  
+
+2. **Add new chains (LLM logic)**  
+   - Define in `ernexus/chains/`.  
+   - Update config in `config.yaml`.  
+
+3. **Modify dietary rules**  
+   - Edit `ernexus/rules/diet_rules.yaml`.  
+
+4. **Adjust prompts**  
+   - Update templates in `ernexus/prompts/`.  
+
+5. **Test locally**  
+   - Run `python app.py`.  
+   - Check `/health` endpoint.  
+
+---
+
+## Citation
+
+If you use **ER-NEXUS** in your research, please cite:
+
+```bibtex
 @misc{ernexus2025,
   title   = {ER-NEXUS: Renal Nutrition & Evidence eXtraction Unified System},
   author  = {Your Name},
   year    = {2025},
   note    = {Available at: https://github.com/your-repo/ernexus}
 }
+```
