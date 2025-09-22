@@ -22,7 +22,7 @@
 
 **ER-NEXUS** is an advanced, **agentic hybrid RAG** (Retrieval-Augmented Generation) system that provides evidence-based guidance on **diet and microbiome management** for individuals with **Chronic Kidney Disease (CKD)** and **End-Stage Renal Disease (ESRD)**.  
 
-⚠️ **Disclaimer:** This system is purely experimental and intended for research purposes.
+**Disclaimer:** This system is purely experimental and intended for research purposes.
 
 ### Key Components
 - **`app.py`** — Flask entry point. Initializes retrievers, loads cached data, and routes UI/API.  
@@ -39,12 +39,12 @@
 
 The architecture uses a **multi-vector retriever with Chroma** to handle multimodal sources (**text, tables, images**). Queries are expanded with a **planner**, re-ranked, and passed to QA chains for final response generation.  
 
-### Architecture Flow (Mermaid Diagram)
+### Architecture Flow 
 ```mermaid
 flowchart TD
-    A[User Query] --> B[Retriever: ChromaDB]
+    A[User Query] --> B[Vector DB: ChromaDB]
     B -->|Text, Images, Tables| C[Planner Expansion]
-    C --> D[Re-ranking]
+    C --> D[Re-rank]
     D --> E[QA Chains]
     E -->|Answer + Sources| F[Frontend/UI]
 ```
