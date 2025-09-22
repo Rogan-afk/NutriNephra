@@ -3,7 +3,7 @@
 
 **Agentic Hybrid RAG** for CKD/ESRD diet & microbiome guidance. The existing `.pkl` caches contains the msot relevant and core knowledgebase for this system. 
 
-> CAUTION: This is experimental, *Not medical advice.* For personal recommendations, consult a renal dietitian/physician.
+> CAUTION: This is experimental, *Not medical advice.* 
 
 
 ---
