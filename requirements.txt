@@ -1,22 +1,33 @@
+# --- Core web ---
 flask==3.0.3
 gunicorn==22.0.0
 python-dotenv==1.0.1
-pydantic==2.8.2
-pyyaml==6.0.2
 markdown2==2.4.13
+pyyaml==6.0.2
+pydantic==2.8.2
 
-# LangChain v0.2+ stack
+# --- LangChain v0.2 + providers ---
 langchain==0.2.13
-langchain-openai==0.1.23
 langchain-community==0.2.12
-langchain-chroma
+langchain-openai==0.1.23
+langchain-chroma==0.1.4
 chromadb==0.5.3
 langchain-groq==0.1.5
-tiktoken==0.7.0
 
-# Optional (if you actually ingest docs)
-unstructured[all-docs]
-pillow
-lxml
+# Tokenization (prebuilt wheels exist on py311)
+tiktoken==0.7.0 ; python_version < "3.13"
 
+# Utilities
 tqdm==4.66.5
+
+# --- Ingestion (safe/light) ---
+# Prefer pure-Python PDF & office parsers on Render
+pypdf==4.3.1
+python-magic==0.4.27
+# If you need simple HTML/text parsing:
+beautifulsoup4==4.12.3
+lxml==5.3.0
+
+# Avoid unstructured[all-docs]. If you need unstructured, pin a lean profile:
+# unstructured==0.15.9
+# unstructured[pdf,docx,md]==0.15.9
