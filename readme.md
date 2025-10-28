@@ -1,4 +1,4 @@
-# ER-NEXUS: Renal Nutrition & Evidence eXtraction Unified System
+# NutriNephra: Renal Nutrition & Evidence eXtraction Unified System
 
 ## Table of Contents
 - [Overview](#overview)
@@ -20,7 +20,7 @@
 
 ## Overview
 
-**ER-NEXUS** is an **agentic multimodal RAG** (Retrieval-Augmented Generation) system that provides evidence-based guidance on **diet and microbiome management** for individuals with **Chronic Kidney Disease (CKD)** and **End-Stage Renal Disease (ESRD)**. The system Merges dietary strategies and probiotic intervention into an unified suggestion pipeline. There is also potential scope and adaptation for other conditions beyond CKD and ESRD.
+**This** is an **agentic multimodal RAG** (Retrieval-Augmented Generation) system that provides evidence-based guidance on **diet and microbiome management** for individuals with **Chronic Kidney Disease (CKD)** and **End-Stage Renal Disease (ESRD)**. The system Merges dietary strategies and probiotic intervention into an unified suggestion pipeline. There is also potential scope and adaptation for other conditions beyond CKD and ESRD.
 
 <img width="1054" height="292" alt="image" src="https://github.com/user-attachments/assets/182d93a5-e9c9-4d66-b9f1-403590e47511" />
 
