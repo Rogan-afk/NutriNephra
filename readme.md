@@ -1,4 +1,4 @@
-# NutriNephra: Renal Nutrition & Evidence eXtraction Unified System
+# NutriNephra: Renal Nutrition & Evidence Extraction Unified System 
 
 ## Table of Contents
 - [Overview](#overview)
